@@ -15,10 +15,17 @@
     href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap"
     rel="stylesheet" />
 
-  <!-- Prevent theme flicker: apply saved theme before first paint -->
+  <!-- Prevent theme flicker: apply saved theme or auto-detect OS theme before first paint -->
   <script>
     (function () {
-      var theme = localStorage.getItem('fimosa-theme') || 'dark';
+      var saved = localStorage.getItem('fimosa-theme');
+      var theme;
+      if (saved) {
+        theme = saved;
+      } else {
+        // Auto-detect OS theme preference
+        theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
       document.documentElement.setAttribute('data-theme', theme);
     })();
   </script>

@@ -8,6 +8,9 @@ import SolusiView from './views/SolusiView.vue'
 import MengapaView from './views/MengapaView.vue'
 import KeamananView from './views/KeamananView.vue'
 import KontakView from './views/KontakView.vue'
+import HargaView from './views/HargaView.vue'
+import TentangView from './views/TentangView.vue'
+import IndustriView from './views/IndustriView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -17,6 +20,9 @@ const router = createRouter({
     { path: '/mengapa-fimosa', component: MengapaView },
     { path: '/keamanan', component: KeamananView },
     { path: '/kontak', component: KontakView },
+    { path: '/harga', component: HargaView },
+    { path: '/tentang', component: TentangView },
+    { path: '/industri', component: IndustriView },
   ],
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) return savedPosition
