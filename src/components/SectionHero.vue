@@ -1,5 +1,54 @@
 <script setup>
+import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
+
+const words = ['Efisien.', 'Cepat.', 'Aman.']
+const displayText = ref('')
+const isDeleting = ref(false)
+const wordIndex = ref(0)
+const charIndex = ref(0)
+
+let typingTimer = null
+
+function typeEffect() {
+  const currentWord = words[wordIndex.value]
+
+  if (!isDeleting.value) {
+    // Typing
+    displayText.value = currentWord.substring(0, charIndex.value + 1)
+    charIndex.value++
+
+    if (charIndex.value === currentWord.length) {
+      // Pause before deleting
+      typingTimer = setTimeout(() => {
+        isDeleting.value = true
+        typeEffect()
+      }, 2000)
+      return
+    }
+    typingTimer = setTimeout(typeEffect, 100)
+  } else {
+    // Deleting
+    displayText.value = currentWord.substring(0, charIndex.value - 1)
+    charIndex.value--
+
+    if (charIndex.value === 0) {
+      isDeleting.value = false
+      wordIndex.value = (wordIndex.value + 1) % words.length
+      typingTimer = setTimeout(typeEffect, 400)
+      return
+    }
+    typingTimer = setTimeout(typeEffect, 60)
+  }
+}
+
+onMounted(() => {
+  typingTimer = setTimeout(typeEffect, 500)
+})
+
+onUnmounted(() => {
+  if (typingTimer) clearTimeout(typingTimer)
+})
 </script>
 
 <template>
@@ -22,7 +71,7 @@ import { RouterLink } from 'vue-router'
         </div>
 
         <h1 class="hero-title">
-          Kelola Bisnis Lebih <span class="gradient-text">Efisien,</span><br/>
+          Kelola Bisnis Lebih <span class="gradient-text typing-text">{{ displayText }}<span class="typing-cursor">|</span></span><br/>
           Sesuai Aturan Indonesia.
         </h1>
 
@@ -250,6 +299,25 @@ export default {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+.typing-text {
+  display: inline-flex;
+  align-items: baseline;
+  min-width: 1ch;
+}
+.typing-cursor {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--electric-blue), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 300;
+  animation: blink 0.7s step-end infinite;
+  margin-left: 1px;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
 }
 
 .hero-subtitle {
