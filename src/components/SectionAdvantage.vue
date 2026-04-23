@@ -26,15 +26,19 @@
             </thead>
             <tbody>
               <tr v-for="(row, i) in rows" :key="i" :class="{ alt: i % 2 === 1 }">
-                <td class="problem">
-                  <span class="problem-icon">⚠️</span>
-                  {{ row.problem }}
+                <td>
+                  <div class="cell-content problem">
+                    <span class="problem-icon">⚠️</span>
+                    <span>{{ row.problem }}</span>
+                  </div>
                 </td>
-                <td class="solution">
-                  <span class="check-icon">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                  </span>
-                  {{ row.solution }}
+                <td>
+                  <div class="cell-content solution">
+                    <span class="check-icon">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                    </span>
+                    <span>{{ row.solution }}</span>
+                  </div>
                 </td>
               </tr>
             </tbody>
@@ -79,6 +83,7 @@ export default {
 
 .adv-table {
   width: 100%;
+  table-layout: fixed;
   border-collapse: collapse;
   font-size: 0.88rem;
 }
@@ -86,6 +91,7 @@ export default {
   background: linear-gradient(135deg, var(--surface), var(--surface-2));
 }
 .adv-table thead th {
+  width: 50%;
   padding: 16px 20px;
   text-align: left;
   font-size: 0.8rem;
@@ -93,6 +99,9 @@ export default {
   letter-spacing: 0.05em;
   color: var(--text-secondary);
   border-bottom: 1px solid var(--border);
+}
+.adv-table thead th:first-child {
+  border-right: 1px solid var(--border);
 }
 .adv-table tbody tr {
   background: var(--surface);
@@ -103,37 +112,43 @@ export default {
   background: var(--deep-blue-2);
 }
 :global([data-theme="light"]) .adv-table tbody tr.alt {
-  background: rgba(255,255,255,0.06);
+  background: rgba(1, 75, 170, 0.04);
 }
 .adv-table tbody tr:hover {
   background: rgba(30, 111, 217, 0.08);
 }
 :global([data-theme="light"]) .adv-table tbody tr:hover {
-  background: rgba(248, 243, 240, 0.12);
+  background: rgba(1, 75, 170, 0.06);
 }
 .adv-table tbody tr:last-child { border-bottom: none; }
 
 .adv-table td {
   padding: 14px 20px;
-  vertical-align: top;
+  vertical-align: middle;
   line-height: 1.6;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.adv-table td:first-child {
+  border-right: 1px solid var(--border);
+}
+
+/* Content wrapper inside td — flex goes here, NOT on td itself */
+.cell-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 .problem {
   color: var(--text-secondary);
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  border-right: 1px solid var(--border);
+  font-weight: 600;
 }
-.problem-icon { flex-shrink: 0; font-size: 0.9rem; margin-top: 2px; }
+.problem-icon { flex-shrink: 0; font-size: 0.9rem; }
 
 .solution {
   color: var(--text-primary);
   font-weight: 500;
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
 }
 .check-icon {
   flex-shrink: 0;
@@ -144,10 +159,14 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 1px;
 }
 
 @media (max-width: 1024px) {
   .adv-layout { grid-template-columns: 1fr; gap: 40px; }
+}
+@media (max-width: 600px) {
+  .adv-table { font-size: 0.8rem; }
+  .adv-table thead th,
+  .adv-table td { padding: 10px 12px; }
 }
 </style>
